@@ -1,6 +1,8 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
+import 'package:nusbi_flutter/pages/main/pages/admin/course/course_management.dart';
+import 'package:nusbi_flutter/pages/main/pages/admin/major/major_management.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/user/user_management.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/assignment_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/attendance_page.dart';
@@ -72,11 +74,11 @@ class _MainPageState extends State<MainPage> {
       ListTile(
           title: Text('Course management'),
           leading: Icon(Icons.book),
-          onTap: () => _drawerNavigation(SchedulePage())),
+          onTap: () => _drawerNavigation(CourseManagement())),
       ListTile(
           title: Text('Major management'),
           leading: Icon(Icons.account_tree_outlined),
-          onTap: () => _drawerNavigation(SchedulePage())),
+          onTap: () => _drawerNavigation(MajorManagement())),
     ];
     return Scaffold(
       drawer: Drawer(

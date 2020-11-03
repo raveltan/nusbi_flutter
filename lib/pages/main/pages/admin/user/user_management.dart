@@ -65,7 +65,10 @@ class _UserManagementPageState extends State<UserManagementPage> {
                 ),
                 title: Text('Ravel Tan'),
                 subtitle: Text('ADMIN'),
-                trailing: Icon(Icons.arrow_forward),
+                trailing: IconButton(
+                  icon: Icon(Icons.delete_forever),
+                  onPressed: () {},
+                ),
                 onTap: () {},
               ),
           separatorBuilder: (x, i) => Divider(),
