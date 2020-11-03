@@ -20,10 +20,17 @@ class LoginRequest extends RequestBase<LoginResponse> {
       error = "Password should be at least 8 characters";
       return;
     }
-    var res = await http.post(apiUrl,body: {
-      "Username":username,
-      "Password":password,
-    });
+    http.Response res;
+    try{
+      res = await http.post(apiUrl,body: {
+        "Username":username,
+        "Password":password,
+      });
+    }
+    catch(e){
+      error = 'Unable to connect to server';
+      return;
+    }
     if (res.statusCode != 200) {
       error = "Server error";
       return;
@@ -67,20 +74,12 @@ class LoginResponse {
   String token;
   String refresh;
   int error;
-
-  LoginResponse({this.token, this.refresh, this.error});
+  String role;
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
     token = json['Token'];
     refresh = json['Refresh'];
     error = json['Error'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Token'] = this.token;
-    data['Refresh'] = this.refresh;
-    data['Error'] = this.error;
-    return data;
+    role = json['Role'];
   }
 }

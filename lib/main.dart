@@ -3,7 +3,11 @@ import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/pages/login/login_page.dart';
 import 'package:nusbi_flutter/pages/main/main_page.dart';
 
-void main() => runApp(MaterialApp(home: Bootstrap()));
+void main() => runApp(MaterialApp(home: Bootstrap(),
+theme: ThemeData.light().copyWith(
+  primaryColor: Colors.deepOrangeAccent,
+  accentColor: Colors.deepOrangeAccent.shade200
+),));
 
 class Bootstrap extends StatefulWidget {
   @override
@@ -12,10 +16,9 @@ class Bootstrap extends StatefulWidget {
 
 class _BootstrapState extends State<Bootstrap> {
   var _login = false;
-  void refreshLogin(){
-    setState(() {
-    });
-  }
+
+  void refreshLogin() => setState(() {});
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -32,15 +35,17 @@ class _BootstrapState extends State<Bootstrap> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Nosebee',style: TextStyle(
-                    fontSize: 50,
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold
-                  ),),
-                  Text('Faster Education',style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 22
-                  ),)
+                  Text(
+                    'Nosebee',
+                    style: TextStyle(
+                        fontSize: 50,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    'Faster Education',
+                    style: TextStyle(color: Colors.white, fontSize: 22),
+                  )
                 ],
               ),
             ),

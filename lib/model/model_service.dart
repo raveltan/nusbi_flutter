@@ -13,6 +13,8 @@ class ModelService {
   var _isLogin = false;
   var _token = '';
   var _refresh = '';
+  var userRole ='';
+  var username = '';
 
   ModelService._internal();
 
@@ -20,10 +22,14 @@ class ModelService {
     await Future.delayed(Duration(seconds: 1));
     var token = await _storage.read(key: 'token');
     var refresh = await _storage.read(key: 'refresh');
-    if (token != null && refresh != null) {
+    var role = await _storage.read(key: 'role');
+    var username = await _storage.read(key: 'username');
+    if (token != null && refresh != null && role != null && username != null) {
       _token = token;
       _refresh = refresh;
+      userRole = role;
       _isLogin = true;
+      this.username = username;
     } else {
       _isLogin = false;
     }
@@ -32,12 +38,16 @@ class ModelService {
 
   Future<void> logout() async => await _storage.deleteAll();
 
-  Future<void> setToken(String token, String refresh) async {
+  Future<void> setToken(String token, String refresh,String role,String user) async {
     _isLogin = true;
     _token = token;
     _refresh = refresh;
+    this.username = user;
+    userRole = role;
     await _storage.write(key: 'token', value: token);
+    await _storage.write(key: 'role', value: role);
     await _storage.write(key: 'refresh', value: refresh);
+    await _storage.write(key: 'username', value: user);
   }
 
   Future doAuthRequest(AuthRequestBase request, {int retry = 0}) async {
