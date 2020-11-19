@@ -3,11 +3,13 @@ import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/pages/login/login_page.dart';
 import 'package:nusbi_flutter/pages/main/main_page.dart';
 
-void main() => runApp(MaterialApp(home: Bootstrap(),
-theme: ThemeData.light().copyWith(
-  primaryColor: Colors.deepOrangeAccent,
-  accentColor: Colors.deepOrangeAccent.shade200
-),));
+void main() => runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Bootstrap(),
+      theme: ThemeData.light().copyWith(
+          primaryColor: Colors.deepOrangeAccent,
+          accentColor: Colors.deepOrangeAccent.shade200),
+    ));
 
 class Bootstrap extends StatefulWidget {
   @override

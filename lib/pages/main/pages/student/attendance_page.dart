@@ -13,17 +13,29 @@ class _AttendancePageState extends State<AttendancePage> {
         backgroundColor: Colors.deepOrangeAccent,
         title: Text('Attendance'),
       ),
-      body: ListView.separated(itemBuilder: (x,index)=>ListTile(
-        title: Text('Creating web application'),
-        subtitle: Text('Web Development'),
-        trailing: Text('2/$index Absents'),
-        isThreeLine: false,
-        leading: CircleAvatar(
-          backgroundColor: Colors.deepOrangeAccent.shade100,
-          foregroundColor: Colors.white,
-          child: Icon(index % 3 ==0 ? Icons.check : Icons.dangerous),
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 700),
+          child: Scrollbar(
+            radius: Radius.circular(30),
+            child: ListView.separated(
+                itemBuilder: (x, index) => ListTile(
+                      title: Text('Creating web application'),
+                      subtitle: Text('Web Development'),
+                      trailing: Text('2/$index Absents'),
+                      isThreeLine: false,
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.deepOrangeAccent.shade100,
+                        foregroundColor: Colors.white,
+                        child: Icon(
+                            index % 3 == 0 ? Icons.check : Icons.dangerous),
+                      ),
+                    ),
+                separatorBuilder: (ctx, index) => Divider(),
+                itemCount: 5),
+          ),
         ),
-      ), separatorBuilder: (ctx,index)=>Divider(), itemCount: 5),
+      ),
     );
   }
 }

@@ -13,17 +13,26 @@ class _AssignmentPageState extends State<AssignmentPage> {
         title: Text('Assignment'),
         backgroundColor: Colors.deepOrangeAccent,
       ),
-      body: ListView.separated(itemBuilder: (x,index)=>ListTile(
-        title: Text('Creating web application'),
-        subtitle: Text('Web Development'),
-        trailing: Text('25/12/20'),
-        isThreeLine: false,
-        leading: CircleAvatar(
-          backgroundColor: Colors.deepOrangeAccent.shade100,
-          foregroundColor: Colors.white,
-          child: Icon(index % 3 ==0 ? Icons.check : Icons.access_time_outlined),
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 700),
+          child: Scrollbar(
+            radius: Radius.circular(30),
+            child: ListView.separated(
+                itemBuilder: (x,index)=>ListTile(
+              title: Text('Creating web application'),
+              subtitle: Text('Web Development'),
+              trailing: Text('25/12/20'),
+              isThreeLine: false,
+              leading: CircleAvatar(
+                backgroundColor: Colors.deepOrangeAccent.shade100,
+                foregroundColor: Colors.white,
+                child: Icon(index % 3 ==0 ? Icons.check : Icons.access_time_outlined),
+              ),
+            ), separatorBuilder: (ctx,index)=>Divider(), itemCount: 20),
+          ),
         ),
-      ), separatorBuilder: (ctx,index)=>Divider(), itemCount: 10),
+      ),
     );
   }
 }

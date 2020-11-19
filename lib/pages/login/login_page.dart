@@ -55,84 +55,93 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SafeArea(
         child: Stack(
-          children: [SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 32,
-                  ),
-                  Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 40,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 52.0,
-                  ),
-                  TextField(
-                    controller: _usernameController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+          children: [Container(
+            alignment: Alignment.topCenter,
+            child: Container(
+              constraints: BoxConstraints(maxWidth: 600),
+              child: Scrollbar(
+                radius: Radius.circular(30),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 32,
                         ),
-                        labelText: 'Username',
-                        hintText: 'xumarno'),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: _obscure,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                        icon:
-                        _obscure ?
-                        Icon(Icons.visibility_outlined):
-                        Icon(Icons.visibility_off_outlined),
-                        onPressed: ()=>setState(()=>_obscure=!_obscure),
-                      ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                        Text(
+                          'Login',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        labelText: 'Password',
-                        hintText: '******'),
-                  ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.symmetric(horizontal: 32),
-                    child: Text(
-                      'By logging in, you had agreed to terms and condition',
-                      textAlign: TextAlign.center,
+                        SizedBox(
+                          height: 52.0,
+                        ),
+                        TextField(
+                          controller: _usernameController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              labelText: 'Username',
+                              hintText: 'xumarno'),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: _obscure,
+                          decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                              icon:
+                              _obscure ?
+                              Icon(Icons.visibility_outlined):
+                              Icon(Icons.visibility_off_outlined),
+                              onPressed: ()=>setState(()=>_obscure=!_obscure),
+                            ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              labelText: 'Password',
+                              hintText: '******'),
+                        ),
+                        SizedBox(
+                          height: 16.0,
+                        ),
+                        Container(
+                          alignment: Alignment.center,
+                          padding: EdgeInsets.symmetric(horizontal: 32),
+                          child: Text(
+                            'By logging in, you had agreed to terms and condition',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 16.0,
+                        ),
+                        RaisedButton(
+                          color: Colors.deepOrange,
+                          textColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12)),
+                          onPressed: _doLogin,
+                          child: Container(
+                            width: double.infinity,
+                            padding: EdgeInsets.all(11),
+                            child: Text(
+                              'Sign In',
+                              style: TextStyle(fontSize: 22),
+                            ),
+                            alignment: Alignment.center,
+                          ),
+                        )
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  RaisedButton(
-                    color: Colors.deepOrange,
-                    textColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12)),
-                    onPressed: _doLogin,
-                    child: Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.all(11),
-                      child: Text(
-                        'Sign In',
-                        style: TextStyle(fontSize: 22),
-                      ),
-                      alignment: Alignment.center,
-                    ),
-                  )
-                ],
+                ),
               ),
             ),
           ),

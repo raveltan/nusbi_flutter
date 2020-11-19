@@ -1,4 +1,5 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nusbi_flutter/model/request_base.dart';
 
 class ModelService {
@@ -7,23 +8,29 @@ class ModelService {
   factory ModelService() => _modelService;
 
   // TODO: change to production api endpoint
-  static const String _baseUrl = 'http://10.0.2.2:8080';
+  static const String _baseUrl = 'http://127.0.0.1:8080';
 
-  final _storage = FlutterSecureStorage();
+  Box _storage;
   var _isLogin = false;
   var _token = '';
   var _refresh = '';
-  var userRole ='';
+  var userRole = '';
   var username = '';
 
   ModelService._internal();
 
+  Future<void> initBox() async => _storage = await Hive.openBox("token");
+
   Future<bool> getToken() async {
+    if(_storage == null) {
+      await Hive.initFlutter();
+      await initBox();
+    }
     await Future.delayed(Duration(seconds: 1));
-    var token = await _storage.read(key: 'token');
-    var refresh = await _storage.read(key: 'refresh');
-    var role = await _storage.read(key: 'role');
-    var username = await _storage.read(key: 'username');
+    var token = _storage.get('token');
+    var refresh = _storage.get('refresh');
+    var role = _storage.get('role');
+    var username = _storage.get('username');
     if (token != null && refresh != null && role != null && username != null) {
       _token = token;
       _refresh = refresh;
@@ -36,18 +43,19 @@ class ModelService {
     return _isLogin;
   }
 
-  Future<void> logout() async => await _storage.deleteAll();
+  Future<void> logout() async => await _storage.clear();
 
-  Future<void> setToken(String token, String refresh,String role,String user) async {
+  Future<void> setToken(
+      String token, String refresh, String role, String user) async {
     _isLogin = true;
     _token = token;
     _refresh = refresh;
     this.username = user;
     userRole = role;
-    await _storage.write(key: 'token', value: token);
-    await _storage.write(key: 'role', value: role);
-    await _storage.write(key: 'refresh', value: refresh);
-    await _storage.write(key: 'username', value: user);
+    await _storage.put('token', token);
+    await _storage.put('role', role);
+    await _storage.put('refresh', refresh);
+    await _storage.put('username', user);
   }
 
   Future doAuthRequest(AuthRequestBase request, {int retry = 0}) async {

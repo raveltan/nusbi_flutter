@@ -8,29 +8,30 @@ class LoginRequest extends RequestBase<LoginResponse> {
 
   String username;
   String password;
-  LoginRequest(this.username,this.password);
+
+  LoginRequest(this.username, this.password);
 
   @override
   Future<void> doRequest() async {
-    if(username.length < 5){
+    if (username.length < 5) {
       error = "Username should be at least 5 characters";
       return;
     }
-    if(password.length < 8){
+    if (password.length < 8) {
       error = "Password should be at least 8 characters";
       return;
     }
     http.Response res;
-    try{
-      res = await http.post(apiUrl,body: {
-        "Username":username,
-        "Password":password,
+    try {
+      res = await http.post(apiUrl, body: {
+        "Username": username,
+        "Password": password,
       });
-    }
-    catch(e){
+    } catch (e) {
       error = 'Unable to connect to server';
       return;
     }
+
     if (res.statusCode != 200) {
       error = "Server error";
       return;
@@ -62,10 +63,11 @@ class LoginRequest extends RequestBase<LoginResponse> {
           error = "";
           break;
         }
-      default:{
-        error = "Unknown error";
-        break;
-      }
+      default:
+        {
+          error = "Unknown error";
+          break;
+        }
     }
   }
 }

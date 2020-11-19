@@ -172,29 +172,32 @@ class _MainPageState extends State<MainPage> {
                                 topLeft: Radius.circular(25),
                                 topRight: Radius.circular(25))),
                         context: context,
-                        builder: (ctx) => Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 32, vertical: 48),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  BarcodeWidget(
-                                    barcode: Barcode.qrCode(),
-                                    // TODO: change with dynamic data
-                                    data: '$_username',
-                                  ),
-                                  SizedBox(
-                                    height: 16.0,
-                                  ),
-                                  Text(
-                                    '@$_username',
-                                    style: TextStyle(
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold),
-                                  )
-                                ],
+                        builder: (ctx) => Center(
+                          child: Container(
+                            constraints: BoxConstraints(maxWidth: 500,maxHeight: 500),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 32, vertical: 48),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    BarcodeWidget(
+                                      barcode: Barcode.qrCode(),
+                                      // TODO: change with dynamic data
+                                      data: '$_username',
+                                    ),
+                                    SizedBox(
+                                      height: 16.0,
+                                    ),
+                                    Text(
+                                      '@$_username',
+                                      style: TextStyle(
+                                          fontSize: 28,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
+                                ),
                               ),
-                            )),
+                        )),
                     child: Container(
                       padding: EdgeInsets.all(8),
                       decoration: BoxDecoration(
@@ -210,85 +213,88 @@ class _MainPageState extends State<MainPage> {
               Content of the application
              */
             _userRole == 's'
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 16),
-                    child: Card(
-                        color: Colors.deepOrangeAccent,
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25)),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: 16, horizontal: 24),
-                          width: double.infinity,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Grade Point Average',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                '3.88',
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Courses Enrolled',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                '50/210',
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                'Current Courses',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Text(
-                                '5',
-                                style: TextStyle(
-                                    fontSize: 25,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                            ],
-                          ),
-                        )),
+                ? Center(
+                    child: Container(
+                      constraints: BoxConstraints(maxWidth: 700),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 16),
+                      child: Card(
+                          color: Colors.deepOrangeAccent,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25)),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 24),
+                            width: double.infinity,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Grade Point Average',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  '3.88',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'Courses Enrolled',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  '50/210',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  'Current Courses',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w400),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                                Text(
+                                  '5',
+                                  style: TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 8,
+                                ),
+                              ],
+                            ),
+                          )),
+                    ),
                   )
                 : Container(),
           ],

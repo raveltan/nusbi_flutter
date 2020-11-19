@@ -12,16 +12,28 @@ class _CoursePageState extends State<CoursesPage> {
       appBar: AppBar(
         backgroundColor: Colors.deepOrangeAccent,
         title: Text('Courses'),
-      ),body: ListView.separated(itemBuilder: (x,index)=>ListTile(
-      title: Text('Web development'),
-      subtitle: Text('Mr. White'),
-      isThreeLine: false,
-      leading: CircleAvatar(
-        backgroundColor: Colors.deepOrangeAccent.shade100,
-        foregroundColor: Colors.white,
-        child: Text((index % 5).toString()),
       ),
-    ), separatorBuilder: (ctx,index)=>Divider(), itemCount: 10),
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 700),
+          child: Scrollbar(
+            radius: Radius.circular(30),
+            child: ListView.separated(
+                itemBuilder: (x, index) => ListTile(
+                      title: Text('Web development'),
+                      subtitle: Text('Mr. White'),
+                      isThreeLine: false,
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.deepOrangeAccent.shade100,
+                        foregroundColor: Colors.white,
+                        child: Text((index % 5).toString()),
+                      ),
+                    ),
+                separatorBuilder: (ctx, index) => Divider(),
+                itemCount: 50),
+          ),
+        ),
+      ),
     );
   }
 }
