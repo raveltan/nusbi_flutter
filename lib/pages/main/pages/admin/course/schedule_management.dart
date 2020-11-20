@@ -15,18 +15,26 @@ class _ScheduleManagementState extends State<ScheduleManagement> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: (){},
+            onPressed: () {},
           )
         ],
       ),
-      body: ListView.separated(
-          itemBuilder: (x, i) => ListTile(
-            title: Text(DateTime.now().toLocal().toString()),
-            subtitle: Text('COMP6953'),
-            onTap: ()=>null,
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 700),
+          child: Scrollbar(
+            radius: Radius.circular(30),
+            child: ListView.separated(
+                itemBuilder: (x, i) => ListTile(
+                      title: Text(DateTime.now().toLocal().toString()),
+                      subtitle: Text('COMP6953'),
+                      onTap: () => null,
+                    ),
+                separatorBuilder: (x, i) => Divider(height: 0,),
+                itemCount: 10),
           ),
-          separatorBuilder: (x, i) => Divider(),
-          itemCount: 10),
+        ),
+      ),
     );
   }
 }

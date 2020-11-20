@@ -87,49 +87,67 @@ class _NewUserPageState extends State<NewUserPage> {
         title: Text('New user (${widget._userType})'),
         centerTitle: true,
       ),
-      body: FormBuilder(
-        key: _fbKey,
-        autovalidateMode: AutovalidateMode.disabled,
-        child: SingleChildScrollView(
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(
+            maxWidth: 700
+          ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
-            child: Column(
-              children: [
-                FormBuilderTextField(
-                  attribute: "username",
-                  decoration: InputDecoration(labelText: "Username"),
-                  validators: [
-                    FormBuilderValidators.minLength(5),
-                    FormBuilderValidators.maxLength(30),
-                  ],
-                ),
-                FormBuilderTextField(
-                  attribute: "password",
-                  decoration: InputDecoration(labelText: "Password"),
-                  validators: [
-                    FormBuilderValidators.minLength(8),
-                    FormBuilderValidators.maxLength(30),
-                  ],
-                ),
-                ...(widget._userType == 'student'
-                    ? _studentForm + _teacherForm
-                    : widget._userType == 'teacher'
-                        ? _teacherForm
-                        : []),
-                SizedBox(
-                  height: 16.0,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  child: RaisedButton(
-                    color: Colors.deepOrange,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                    textColor: Colors.white,
-                    child: Text('Add'),
-                    onPressed: () {},
+            padding: const EdgeInsets.all(32.0),
+            child: Scrollbar(
+              radius: Radius.circular(30),
+              child: FormBuilder(
+                key: _fbKey,
+                autovalidateMode: AutovalidateMode.disabled,
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
+                    child: Column(
+                      children: [
+                        FormBuilderTextField(
+                          attribute: "username",
+                          decoration: InputDecoration(labelText: "Username"),
+                          validators: [
+                            FormBuilderValidators.minLength(5),
+                            FormBuilderValidators.maxLength(30),
+                          ],
+                        ),
+                        FormBuilderTextField(
+                          attribute: "password",
+                          decoration: InputDecoration(labelText: "Password"),
+                          validators: [
+                            FormBuilderValidators.minLength(8),
+                            FormBuilderValidators.maxLength(30),
+                          ],
+                        ),
+                        ...(widget._userType == 'student'
+                            ? _studentForm + _teacherForm
+                            : widget._userType == 'teacher'
+                                ? _teacherForm
+                                : []),
+                        SizedBox(
+                          height: 16.0,
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 32,
+                          child: RaisedButton(
+                            color: Colors.deepOrange,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            textColor: Colors.white,
+                            child: Text('Add'),
+                            onPressed: () {
+                              if(_fbKey.currentState.saveAndValidate()){
+                                print(_fbKey.currentState.value);
+                              }
+                            },
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                )
-              ],
+                ),
+              ),
             ),
           ),
         ),

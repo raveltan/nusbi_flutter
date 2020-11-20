@@ -20,15 +20,23 @@ class _ClassManagementState extends State<ClassManagement> {
           )
         ],
       ),
-      body: ListView.separated(
-          itemBuilder: (x, i) => ListTile(
-                title: Text('L3AC'),
-                subtitle: Text('Batch 2020'),
-                onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (x) => ScheduleManagement())),
-              ),
-          separatorBuilder: (x, i) => Divider(),
-          itemCount: 10),
+      body: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 700),
+          child: Scrollbar(
+            radius: Radius.circular(30),
+            child: ListView.separated(
+                itemBuilder: (x, i) => ListTile(
+                      title: Text('L3AC'),
+                      subtitle: Text('Batch 2020'),
+                      onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(builder: (x) => ScheduleManagement())),
+                    ),
+                separatorBuilder: (x, i) => Divider(height: 0,),
+                itemCount: 10),
+          ),
+        ),
+      ),
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
-import 'package:nusbi_flutter/model/models/login_model.dart';
+import 'package:nusbi_flutter/model/models/auth/login_model.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback _loginCallback;
@@ -30,22 +30,25 @@ class _LoginPageState extends State<LoginPage> {
     });
     if (result is String) {
       showDialog(
-        context: context,
-        builder: (x)=>AlertDialog(
-          title: Text('Error'),
-          content: Text(result),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-          actions: [
-            FlatButton(
-              child: Text('Ok'),
-              onPressed: ()=>Navigator.of(x).pop(),
-            ),
-          ],
-        )
-      );
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text('Error'),
+                content: Text(result),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15)),
+                actions: [
+                  FlatButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Text('Ok'),
+                    onPressed: () => Navigator.of(x).pop(),
+                  ),
+                ],
+              ));
     } else {
       var r = result as LoginResponse;
-      await ModelService().setToken(r.token, r.refresh,r.role,_usernameController.text.toLowerCase());
+      await ModelService().setToken(
+          r.token, r.refresh, r.role, _usernameController.text.toLowerCase());
       widget._loginCallback();
     }
   }
@@ -54,21 +57,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Stack(
-          children: [Container(
-            alignment: Alignment.topCenter,
+        child: Stack(children: [
+          Container(
+            color: Colors.deepOrangeAccent,
+            alignment: Alignment.center,
             child: Container(
-              constraints: BoxConstraints(maxWidth: 600),
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              constraints: BoxConstraints(maxWidth: 400),
               child: Scrollbar(
                 radius: Radius.circular(30),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(32.0),
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 32,
-                        ),
                         Text(
                           'Login',
                           style: TextStyle(
@@ -77,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         SizedBox(
-                          height: 52.0,
+                          height: 32.0,
                         ),
                         TextField(
                           controller: _usernameController,
@@ -92,16 +95,17 @@ class _LoginPageState extends State<LoginPage> {
                           height: 10,
                         ),
                         TextField(
+                          onSubmitted: (_) => _doLogin(),
                           controller: _passwordController,
                           obscureText: _obscure,
                           decoration: InputDecoration(
-                            suffixIcon: IconButton(
-                              icon:
-                              _obscure ?
-                              Icon(Icons.visibility_outlined):
-                              Icon(Icons.visibility_off_outlined),
-                              onPressed: ()=>setState(()=>_obscure=!_obscure),
-                            ),
+                              suffixIcon: IconButton(
+                                icon: _obscure
+                                    ? Icon(Icons.visibility_outlined)
+                                    : Icon(Icons.visibility_off_outlined),
+                                onPressed: () =>
+                                    setState(() => _obscure = !_obscure),
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -145,34 +149,39 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-          _isLoading ? Container(
-            height: double.infinity,
-            width: double.infinity,
-            color: Colors.black.withOpacity(0.4),
-            alignment: Alignment.center,
-            child: Container(
-              padding: EdgeInsets.all(32),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15)
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 16,),
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16,),
-                  Text('Please wait',style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18
-                  ),)
-                ],
-              ),
-            ),
-          ): Container(),
-          ]
-        ),
+          _isLoading
+              ? Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  color: Colors.black.withOpacity(0.4),
+                  alignment: Alignment.center,
+                  child: Container(
+                    padding: EdgeInsets.all(32),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 16,
+                        ),
+                        CircularProgressIndicator(),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          'Please wait',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 18),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              : Container(),
+        ]),
       ),
     );
   }

@@ -22,7 +22,7 @@ class ModelService {
   Future<void> initBox() async => _storage = await Hive.openBox("token");
 
   Future<bool> getToken() async {
-    if(_storage == null) {
+    if (_storage == null) {
       await Hive.initFlutter();
       await initBox();
     }
@@ -58,21 +58,24 @@ class ModelService {
     await _storage.put('username', user);
   }
 
+  Future<void> _refreshToken() async{
+
+  }
+
   Future doAuthRequest(AuthRequestBase request, {int retry = 0}) async {
     request.setApiUrl(_baseUrl);
-    request.doAuthRequest(_token);
+    await request.doAuthRequest(_token);
     if (request.doRefreshToken && retry < 3) {
-      // TODO: Refresh the token
+      await _refreshToken();
       await doAuthRequest(request, retry: retry + 1);
       return request.response;
     } else if (retry > 2) {
-      return null;
+      return "Unable to refresh token";
     }
     if (request.error == "") {
       return request.response;
-    } else {
-      return request.error;
     }
+    return request.error;
   }
 
   Future doRequest(RequestBase request) async {
