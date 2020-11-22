@@ -4,30 +4,35 @@ import 'dart:io';
 import 'package:nusbi_flutter/model/request_base.dart';
 import 'package:http/http.dart' as http;
 
-class CreateMajorRequest extends AuthRequestBase<CreateMajorResponse> {
-  String name;
+class CreateAdminRequest extends AuthRequestBase<CreateAdminResponse> {
+  String username;
+  String password;
 
-  CreateMajorRequest(this.name);
+  CreateAdminRequest(this.username, this.password);
 
   @override
-  void setApiUrl(String url) => apiUrl = url + '/admin/major/';
+  void setApiUrl(String url) => apiUrl = url + '/admin/user/createAdmin';
 
   @override
   Future doAuthRequest(String token) async {
-    if (name.length < 3) {
-      error = "Major name should at least be 3 character";
+    if (username.length < 5) {
+      error = "Username should at least be 5 character";
+      return;
+    }
+    if (password.length < 8) {
+      error = "Password should at least be 8 character";
       return;
     }
     http.Response res;
     try {
       res = await http.post(apiUrl,
-          body: {"Name": name},
+          body: {"Username": username, "Password": password},
           headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     } catch (e) {
       error = 'Unable to connect to server';
       return;
     }
-    if(res.body == "Invalid or expired JWT"){
+    if (res.body == "Invalid or expired JWT") {
       doRefreshToken = true;
       return;
     }
@@ -36,18 +41,16 @@ class CreateMajorRequest extends AuthRequestBase<CreateMajorResponse> {
       return;
     }
     try {
-      response = CreateMajorResponse.fromJson(jsonDecode(res.body));
+      response = CreateAdminResponse.fromJson(jsonDecode(res.body));
     } catch (e) {
       error = "Bad response";
       return;
     }
-    if (response.error == 4){
-      error = "Major exists";
+    if (response.error == 5) {
+      error = "Username exists";
       return;
-    }else if(response.error == 3){
-      error = "Major name too short";
-      return;
-    }else if(response.error != -1){
+    }
+    if (response.error != -1) {
       error = "Unknown error";
       return;
     }
@@ -60,12 +63,12 @@ class CreateMajorRequest extends AuthRequestBase<CreateMajorResponse> {
   }
 }
 
-class CreateMajorResponse {
+class CreateAdminResponse {
   int error;
 
-  CreateMajorResponse({this.error});
+  CreateAdminResponse({this.error});
 
-  CreateMajorResponse.fromJson(Map<String, dynamic> json) {
+  CreateAdminResponse.fromJson(Map<String, dynamic> json) {
     error = json['Error'];
   }
 }

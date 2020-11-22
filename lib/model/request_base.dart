@@ -1,7 +1,7 @@
 abstract class RequestBase<T> {
   String apiUrl;
   T response;
-  String error;
+  String error = "";
 
   void setApiUrl(String url);
   Future doRequest();

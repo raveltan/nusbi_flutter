@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nusbi_flutter/model/models/auth/refresh_token_model.dart';
 import 'package:nusbi_flutter/model/request_base.dart';
 
 class ModelService {
@@ -59,18 +60,27 @@ class ModelService {
   }
 
   Future<void> _refreshToken() async{
-
+    var ins = TokenRefreshRequest();
+    ins.setApiUrl(_baseUrl);
+    await ins.doAuthRequest(_refresh);
+    if (ins.error == "" || ins.error == null){
+      var res = ins.response;
+      await _storage.put('token', res.token);
+      await _storage.put('refresh',res.refresh);
+      _token = res.token;
+      _refresh = res.refresh;
+    }
   }
 
   Future doAuthRequest(AuthRequestBase request, {int retry = 0}) async {
     request.setApiUrl(_baseUrl);
+    request.doRefreshToken = false;
     await request.doAuthRequest(_token);
-    if (request.doRefreshToken && retry < 3) {
+    if (request.doRefreshToken && retry < 2){
       await _refreshToken();
-      await doAuthRequest(request, retry: retry + 1);
-      return request.response;
-    } else if (retry > 2) {
-      return "Unable to refresh token";
+      return await doAuthRequest(request, retry: retry + 1);
+    } else if (retry >= 2) {
+      return "Unable to refresh token, try signin in again";
     }
     if (request.error == "") {
       return request.response;
