@@ -125,180 +125,116 @@ class _MainPageState extends State<MainPage> {
         backgroundColor: Colors.deepOrangeAccent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              // TODO: refactor to it's own componnet
-              padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
-              decoration: BoxDecoration(
-                  color: Colors.deepOrangeAccent,
-                  borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(50),
-                      bottomRight: Radius.circular(50))),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    child: Icon(
-                      Icons.supervisor_account_outlined,
-                      size: 32,
-                    ),
-                    radius: 32,
-                    backgroundColor: Colors.deepOrange.shade50,
-                    foregroundColor: Colors.deepOrange,
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Container(
+            // TODO: refactor to it's own componnet
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
+            decoration: BoxDecoration(
+                color: Colors.deepOrangeAccent,
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(50),
+                    bottomRight: Radius.circular(50))),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  child: Icon(
+                    Icons.supervisor_account_outlined,
+                    size: 32,
                   ),
-                  SizedBox(
-                    width: 16,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Welcome',
-                          style: TextStyle(fontSize: 20, color: Colors.white)),
-                      Text('$_username',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold))
-                    ],
-                  ),
-                  Expanded(
-                    child: Container(),
-                  ),
-                  InkWell(
-                    onTap: () => showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(25),
-                                topRight: Radius.circular(25))),
-                        context: context,
-                        builder: (ctx) => Center(
-                          child: Container(
-                            constraints: BoxConstraints(maxWidth: 500,maxHeight: 500),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 32, vertical: 48),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    BarcodeWidget(
-                                      barcode: Barcode.qrCode(),
-                                      // TODO: change with dynamic data
-                                      data: '$_username',
-                                    ),
-                                    SizedBox(
-                                      height: 16.0,
-                                    ),
-                                    Text(
-                                      '@$_username',
-                                      style: TextStyle(
-                                          fontSize: 28,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
+                  radius: 32,
+                  backgroundColor: Colors.deepOrange.shade50,
+                  foregroundColor: Colors.deepOrange,
+                ),
+                SizedBox(
+                  width: 16,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Welcome',
+                        style: TextStyle(fontSize: 20, color: Colors.white)),
+                    Text('$_username',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold))
+                  ],
+                ),
+                Expanded(
+                  child: Container(),
+                ),
+                InkWell(
+                  onTap: () => showModalBottomSheet(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(25),
+                              topRight: Radius.circular(25))),
+                      context: context,
+                      builder: (ctx) => Center(
+                            child: Container(
+                              constraints:
+                                  BoxConstraints(maxWidth: 500, maxHeight: 500),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 32, vertical: 48),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  BarcodeWidget(
+                                    barcode: Barcode.qrCode(),
+                                    // TODO: change with dynamic data
+                                    data: '$_username',
+                                  ),
+                                  SizedBox(
+                                    height: 16.0,
+                                  ),
+                                  Text(
+                                    '@$_username',
+                                    style: TextStyle(
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
                               ),
-                        )),
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Icon(Icons.qr_code_scanner_outlined),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            /*
-              Content of the application
-             */
-            _userRole == 's'
-                ? Center(
-                    child: Container(
-                      constraints: BoxConstraints(maxWidth: 700),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 16),
-                      child: Card(
-                          color: Colors.deepOrangeAccent,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25)),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 24),
-                            width: double.infinity,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Grade Point Average',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  '3.88',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  'Courses Enrolled',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  '50/210',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  'Current Courses',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w400),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  '5',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                              ],
                             ),
                           )),
-                    ),
-                  )
-                : Container(),
-          ],
-        ),
+                  child: Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Icon(Icons.qr_code_scanner_outlined),
+                  ),
+                )
+              ],
+            ),
+          ),
+          /*
+            Content of the application
+           */
+
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.book,
+                  size: 52,
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  'Access the menu \nby tapping the hamburger button',
+                  textAlign: TextAlign.center,
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

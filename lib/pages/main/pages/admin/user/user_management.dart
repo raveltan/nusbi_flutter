@@ -118,33 +118,6 @@ class _UserManagementPageState extends State<UserManagementPage> {
                         title: Text('${_users[i].username}'),
                         subtitle: Text(
                             '${_users[i].role == 'a' ? "Admin" : _users[i].role == 's' ? "Student" : "Teacher"}'),
-                        trailing: IconButton(
-                          icon: Icon(Icons.delete_forever),
-                          onPressed: () => showDialog(
-                              context: context,
-                              builder: (x) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    title: Text("Delete user"),
-                                    actions: [
-                                      FlatButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        child: Text("Yes"),
-                                        onPressed: () {},
-                                      ),
-                                      FlatButton(
-                                        shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(30)),
-                                        child: Text("No"),
-                                        onPressed: () => Navigator.of(x).pop(),
-                                      )
-                                    ],
-                                  )),
-                        ),
                         onTap: () {},
                       ),
                   separatorBuilder: (x, i) => Divider(

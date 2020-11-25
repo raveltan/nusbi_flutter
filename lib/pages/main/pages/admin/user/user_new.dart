@@ -5,11 +5,13 @@ import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/model/models/admin/major/get_major_model.dart';
 import 'package:nusbi_flutter/model/models/admin/user/create_admin_model.dart';
 import 'package:nusbi_flutter/model/models/admin/user/create_student_model.dart';
+import 'package:nusbi_flutter/model/models/admin/user/create_teacher_model.dart';
 
 class NewUserPage extends StatefulWidget {
   final String _userType;
   final Function _callback;
-  NewUserPage(this._userType,this._callback);
+
+  NewUserPage(this._userType, this._callback);
 
   @override
   _NewUserPageState createState() => _NewUserPageState();
@@ -30,10 +32,10 @@ class _NewUserPageState extends State<NewUserPage> {
   Future<void> addUser() async {
     if (!_fbKey.currentState.saveAndValidate()) return;
     var _data = _fbKey.currentState.value;
+    setState(() {
+      _isLoading = true;
+    });
     if (widget._userType == "student") {
-      setState(() {
-        _isLoading = true;
-      });
       var date = (_data['dob'] as DateTime);
       var dob = "${date.year}-${date.month}-${date.day}";
       var result = await ModelService().doAuthRequest(CreateStudentRequest(
@@ -47,6 +49,9 @@ class _NewUserPageState extends State<NewUserPage> {
           username: _data['username'],
           password: _data['password']));
       if (result is String) {
+        setState(() {
+          _isLoading = false;
+        });
         showDialog(
             context: context,
             builder: (x) => AlertDialog(
@@ -65,6 +70,9 @@ class _NewUserPageState extends State<NewUserPage> {
       var result = await ModelService().doAuthRequest(
           CreateAdminRequest(_data['username'], _data['password']));
       if (result is String) {
+        setState(() {
+          _isLoading = false;
+        });
         showDialog(
             context: context,
             builder: (x) => AlertDialog(
@@ -79,7 +87,36 @@ class _NewUserPageState extends State<NewUserPage> {
                 ));
         return;
       }
-    } else {}
+    } else {
+      var date = (_data['dob'] as DateTime);
+      var dob = "${date.year}-${date.month}-${date.day}";
+      var result = await ModelService().doAuthRequest(CreateTeacherRequest(
+          DOB: dob,
+          email: _data['email'],
+          firstName: _data['firstName'],
+          gender: _data['gender'][0],
+          lastName: _data['lastName'],
+          username: _data['username'],
+          password: _data['password']));
+      if (result is String) {
+        setState(() {
+          _isLoading = false;
+        });
+        showDialog(
+            context: context,
+            builder: (x) => AlertDialog(
+                  title: Text("Error"),
+                  content: Text(result),
+                  actions: [
+                    FlatButton(
+                      child: Text("Ok"),
+                      onPressed: () => Navigator.of(context).pop(),
+                    )
+                  ],
+                ));
+        return;
+      }
+    }
     Navigator.of(context).pop();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text("New user added"),
