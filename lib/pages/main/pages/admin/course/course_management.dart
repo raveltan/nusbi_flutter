@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/course/class_management.dart';
+import 'package:nusbi_flutter/model/model_service.dart';
+import 'package:nusbi_flutter/model/models/admin/course/get_teacher_model.dart';
+import 'package:nusbi_flutter/model/models/admin/course/create_course_model.dart';
 
 class CourseManagement extends StatefulWidget {
   @override
@@ -8,8 +11,141 @@ class CourseManagement extends StatefulWidget {
 
 class _CourseManagementState extends State<CourseManagement> {
   var _isLoading = false;
-  void _addCourse(){
-    
+  List<TeacherData> _teacherData = [];
+  var _courseNameTextEditingController = TextEditingController();
+  String _newLecturerID;
+  var _courseScuTextEditingController = TextEditingController();
+
+  void _addNewCourses() async {
+    Navigator.of(context).pop();
+    int scu;
+    try {
+      scu = int.parse(_courseScuTextEditingController.text) ?? -1;
+    } catch (_) {
+      scu = -1;
+    }
+    if (_newLecturerID == "1" ||
+        _newLecturerID == null ||
+        _courseNameTextEditingController.text.length < 5 ||
+        scu < 0 ||
+        scu > 9) {
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text("Error"),
+                content: Text(
+                    "Please make sure that the lecturer is not empty and the course name is at least 5 characters"),
+              ));
+      return;
+    }
+    setState(() => _isLoading = true);
+    var result = await ModelService().doAuthRequest(CreateCourseRequest(
+        name: _courseNameTextEditingController.text,
+        scu: scu,
+        teacherID: _newLecturerID));
+    setState(() => _isLoading = false);
+    if (result is String) {
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text("Error"),
+                content: Text(result),
+              ));
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+          'Course "${_courseNameTextEditingController.text}" is added sucesfully'),
+      action: SnackBarAction(
+        label: 'Ok',
+        onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+      ),
+    ));
+    _courseScuTextEditingController.text = "";
+    _newLecturerID = null;
+    _courseNameTextEditingController.text = "";
+  }
+
+  void _addCourse() async {
+    if (!await _getTeacherData()) return;
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (x) => StatefulBuilder(
+              builder: (x, ss) => AlertDialog(
+                title: Text('Add new course'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: _courseNameTextEditingController,
+                      decoration: InputDecoration(labelText: 'Course name'),
+                    ),
+                    TextField(
+                      controller: _courseScuTextEditingController,
+                      decoration: InputDecoration(labelText: 'Course SCU'),
+                      keyboardType: TextInputType.number,
+                    ),
+                    DropdownButton<String>(
+                      hint: Text('Teacher\'s name'),
+                      isExpanded: true,
+                      value: _newLecturerID,
+                      items: _teacherData.isNotEmpty
+                          ? _teacherData
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(e.name),
+                                    value: e.iD,
+                                  ))
+                              .toList()
+                          : [
+                              DropdownMenuItem(
+                                child: Text(''),
+                                value: '1',
+                              )
+                            ],
+                      onChanged: (value) {
+                        ss(() => _newLecturerID = value);
+                      },
+                    )
+                  ],
+                ),
+                actions: [
+                  FlatButton(
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      Navigator.of(x).pop();
+                    },
+                  ),
+                  FlatButton(
+                    child: Text('Add'),
+                    onPressed: _addNewCourses,
+                  )
+                ],
+              ),
+            ));
+  }
+
+  Future<bool> _getTeacherData() async {
+    setState(() => _isLoading = true);
+    var result = await ModelService().doAuthRequest(GetTeacherRequest());
+    setState(() => _isLoading = false);
+    if (result is String) {
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text('Error'),
+                content: Text(result),
+                actions: [
+                  FlatButton(
+                    child: Text("Ok"),
+                    onPressed: () => Navigator.of(x).pop(),
+                  )
+                ],
+              ));
+      return false;
+    }
+    _teacherData = (result as GetTeacherResponse).data;
+    return true;
   }
 
   @override
@@ -21,7 +157,7 @@ class _CourseManagementState extends State<CourseManagement> {
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () {},
+            onPressed: _addCourse,
           )
         ],
       ),

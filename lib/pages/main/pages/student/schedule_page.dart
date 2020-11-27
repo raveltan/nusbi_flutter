@@ -31,7 +31,7 @@ class _SchedulePageState extends State<SchedulePage> {
       body: Center(
         child: Container(
           constraints: BoxConstraints(
-            maxWidth: 500,
+            maxWidth: 400,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

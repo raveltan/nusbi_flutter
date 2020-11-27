@@ -24,7 +24,7 @@ class CreateCourseRequest extends AuthRequestBase<CreateCourseResponse> {
     http.Response res;
     try {
       res = await http.post(apiUrl,
-          body: {"Name": name, "TeacherID": teacherID, "Scu": scu},
+          body: {"Name": name, "TeacherID": teacherID, "Scu": scu.toString()},
           headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     } catch (e) {
       error = 'Unable to connect to server';
