@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:nusbi_flutter/pages/main/pages/admin/course/class_management.dart';
+import 'package:nusbi_flutter/pages/main/pages/admin/course/class/class_management.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/model/models/admin/course/get_teacher_model.dart';
 import 'package:nusbi_flutter/model/models/admin/course/create_course_model.dart';
+import 'package:nusbi_flutter/model/models/admin/course/get_course_model.dart';
 
 class CourseManagement extends StatefulWidget {
   @override
@@ -15,6 +16,35 @@ class _CourseManagementState extends State<CourseManagement> {
   var _courseNameTextEditingController = TextEditingController();
   String _newLecturerID;
   var _courseScuTextEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _getCourses();
+  }
+
+  void _getCourses() async {
+    setState(() {
+      _isLoading = true;
+    });
+    var result = await ModelService().doAuthRequest(GetCourseRequest());
+    setState(() {
+      _isLoading = false;
+    });
+    if (result is String) {
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text("Error"),
+                content: Text(result),
+              ));
+      return;
+    }
+    _courseData = (result as GetCourseResponse).data;
+    setState(() {});
+  }
+
+  List<GetCourseResponseData> _courseData = [];
 
   void _addNewCourses() async {
     Navigator.of(context).pop();
@@ -53,6 +83,7 @@ class _CourseManagementState extends State<CourseManagement> {
               ));
       return;
     }
+    _getCourses();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text(
           'Course "${_courseNameTextEditingController.text}" is added sucesfully'),
@@ -170,16 +201,21 @@ class _CourseManagementState extends State<CourseManagement> {
                 radius: Radius.circular(30),
                 child: ListView.separated(
                     itemBuilder: (x, i) => ListTile(
-                          title: Text('Introduction to programming'),
-                          subtitle: Text('6 SCU'),
+                          leading: CircleAvatar(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            child: Text(_courseData[i].scu.toString()),
+                            foregroundColor: Colors.white,
+                          ),
+                          title: Text(_courseData[i].name),
+                          subtitle: Text(_courseData[i].teacherName),
                           onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (x) => ClassManagement())),
+                                  builder: (x) => ClassManagement(_courseData[i].name,_courseData[i].courseID))),
                         ),
                     separatorBuilder: (x, i) => Divider(
                           height: 0,
                         ),
-                    itemCount: 10),
+                    itemCount: _courseData.length),
               ),
             ),
           ),
