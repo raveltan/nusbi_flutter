@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nusbi_flutter/model/model_service.dart';
+import 'package:nusbi_flutter/model/models/admin/course/class/create_class_model.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/course/schedule/schedule_management.dart';
 
 class ClassManagement extends StatefulWidget {
@@ -12,7 +14,7 @@ class ClassManagement extends StatefulWidget {
 }
 
 class _ClassManagementState extends State<ClassManagement> {
-  bool _loading = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -21,6 +23,13 @@ class _ClassManagementState extends State<ClassManagement> {
   }
 
   void getData() async {}
+  void toggleLoading(bool status){
+    setState(() {
+      _isLoading = status;
+    });
+  }
+  var classNameTextEditingController = TextEditingController();
+  var batchTextEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -40,13 +49,13 @@ class _ClassManagementState extends State<ClassManagement> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             TextField(
-                              //controller: _courseNameTextEditingController,
+                              controller: classNameTextEditingController,
                               decoration:
                                   InputDecoration(labelText: 'Class Name'),
                             ),
                             TextField(
-                              //controller: _courseScuTextEditingController,
                               decoration: InputDecoration(labelText: 'Batch'),
+                              controller: batchTextEditingController,
                               keyboardType: TextInputType.number,
                             ),
                           ],
@@ -60,7 +69,7 @@ class _ClassManagementState extends State<ClassManagement> {
                           ),
                           FlatButton(
                             child: Text('Add'),
-                            onPressed: _addNewCourses,
+                            onPressed: _addNewClass,
                           )
                         ],
                       ));
@@ -68,28 +77,90 @@ class _ClassManagementState extends State<ClassManagement> {
           )
         ],
       ),
-      body: Center(
-        child: Container(
-          constraints: BoxConstraints(maxWidth: 700),
-          child: Scrollbar(
-            radius: Radius.circular(30),
-            child: ListView.separated(
-                itemBuilder: (x, i) => ListTile(
-                      title: Text('L3AC'),
-                      subtitle: Text('Batch 2020'),
-                      onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                          builder: (x) => ScheduleManagement(
-                              widget.title + ' - ' + 'L3AC', 'dsfasfs'))),
-                    ),
-                separatorBuilder: (x, i) => Divider(
-                      height: 0,
-                    ),
-                itemCount: 10),
+      body: Stack(children: [
+        Center(
+          child: Container(
+            constraints: BoxConstraints(maxWidth: 700),
+            child: Scrollbar(
+              radius: Radius.circular(30),
+              child: ListView.separated(
+                  itemBuilder: (x, i) => ListTile(
+                        title: Text('L3AC'),
+                        subtitle: Text('Batch 2020'),
+                        onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (x) => ScheduleManagement(
+                                    widget.title + ' - ' + 'L3AC', 'dsfasfs'))),
+                      ),
+                  separatorBuilder: (x, i) => Divider(
+                        height: 0,
+                      ),
+                  itemCount: 10),
+            ),
           ),
         ),
-      ),
+        _isLoading
+            ? Container(
+                height: double.infinity,
+                width: double.infinity,
+                color: Colors.black.withOpacity(0.4),
+                alignment: Alignment.center,
+                child: Container(
+                  padding: EdgeInsets.all(32),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15)),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        height: 16,
+                      ),
+                      CircularProgressIndicator(),
+                      SizedBox(
+                        height: 16,
+                      ),
+                      Text(
+                        'Please wait',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : Container(),
+      ]),
     );
   }
 
-  void _addNewCourses() {}
+  void _addNewClass() async {
+    Navigator.of(context).pop();
+    toggleLoading(true);
+    var result = await ModelService().doAuthRequest(CreateClassRequest(
+        classNameTextEditingController.text,
+        widget.id,
+        batchTextEditingController.text));
+    toggleLoading(false);
+    if(result is String){
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+            title: Text("Error"),
+            content: Text(result),
+          ));
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(
+          'Class "${classNameTextEditingController.text}" is added successfully'),
+      action: SnackBarAction(
+        label: 'Ok',
+        onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+      ),
+    ));
+    classNameTextEditingController.text = '';
+    batchTextEditingController.text = '';
+  }
 }

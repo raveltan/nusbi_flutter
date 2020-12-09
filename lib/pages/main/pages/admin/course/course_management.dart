@@ -121,7 +121,7 @@ class _CourseManagementState extends State<CourseManagement> {
                       hint: Text('Teacher\'s name'),
                       isExpanded: true,
                       value: _newLecturerID,
-                      items: _teacherData.isNotEmpty
+                      items: _teacherData?.isNotEmpty ?? false
                           ? _teacherData
                               .map((e) => DropdownMenuItem(
                                     child: Text(e.name),
@@ -215,7 +215,7 @@ class _CourseManagementState extends State<CourseManagement> {
                     separatorBuilder: (x, i) => Divider(
                           height: 0,
                         ),
-                    itemCount: _courseData.length),
+                    itemCount: _courseData?.length ?? 0),
               ),
             ),
           ),
