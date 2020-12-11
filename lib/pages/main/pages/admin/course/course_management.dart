@@ -32,6 +32,7 @@ class _CourseManagementState extends State<CourseManagement> {
       _isLoading = false;
     });
     if (result is String) {
+      Navigator.of(context).pop();
       showDialog(
           context: context,
           builder: (x) => AlertDialog(

@@ -10,5 +10,5 @@ abstract class RequestBase<T> {
 abstract class AuthRequestBase<T> extends RequestBase<T>{
   bool doRefreshToken = false;
 
-  Future doAuthRequest(String token);
+  Future doAuthRequest(String token) ;
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/model/models/admin/course/class/create_class_model.dart';
+import 'package:nusbi_flutter/model/models/admin/course/class/get_class_model.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/course/schedule/schedule_management.dart';
 
 class ClassManagement extends StatefulWidget {
@@ -22,12 +23,32 @@ class _ClassManagementState extends State<ClassManagement> {
     getData();
   }
 
-  void getData() async {}
-  void toggleLoading(bool status){
+  List<ClassData> _data = [];
+
+  void getData() async {
+    toggleLoading(true);
+    var result = await ModelService().doAuthRequest(GetClassRequest(widget.id));
+    toggleLoading(false);
+    if (result is String) {
+      Navigator.of(context).pop();
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text("Error"),
+                content: Text(result),
+              ));
+      return;
+    }
+    _data = (result as GetClassResponse).data;
+    setState(() {});
+  }
+
+  void toggleLoading(bool status) {
     setState(() {
       _isLoading = status;
     });
   }
+
   var classNameTextEditingController = TextEditingController();
   var batchTextEditingController = TextEditingController();
 
@@ -85,17 +106,17 @@ class _ClassManagementState extends State<ClassManagement> {
               radius: Radius.circular(30),
               child: ListView.separated(
                   itemBuilder: (x, i) => ListTile(
-                        title: Text('L3AC'),
-                        subtitle: Text('Batch 2020'),
+                        title: Text(_data[i].className),
+                        subtitle: Text(_data[i].batch.toString()),
                         onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
                                 builder: (x) => ScheduleManagement(
-                                    widget.title + ' - ' + 'L3AC', 'dsfasfs'))),
+                                    widget.title + ' - ' + _data[i].className, _data[i].classID))),
                       ),
                   separatorBuilder: (x, i) => Divider(
                         height: 0,
                       ),
-                  itemCount: 10),
+                  itemCount: _data.length),
             ),
           ),
         ),
@@ -143,13 +164,13 @@ class _ClassManagementState extends State<ClassManagement> {
         widget.id,
         batchTextEditingController.text));
     toggleLoading(false);
-    if(result is String){
+    if (result is String) {
       showDialog(
           context: context,
           builder: (x) => AlertDialog(
-            title: Text("Error"),
-            content: Text(result),
-          ));
+                title: Text("Error"),
+                content: Text(result),
+              ));
       return;
     }
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -162,5 +183,6 @@ class _ClassManagementState extends State<ClassManagement> {
     ));
     classNameTextEditingController.text = '';
     batchTextEditingController.text = '';
+    getData();
   }
 }
