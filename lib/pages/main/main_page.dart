@@ -9,6 +9,7 @@ import 'package:nusbi_flutter/pages/main/pages/student/attendance_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/courses_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/profile_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/schedule_page.dart';
+import 'package:nusbi_flutter/pages/main/pages/teacher/teacher_profile_page.dart';
 
 class MainPage extends StatefulWidget {
   final VoidCallback _signOutCallback;
@@ -80,6 +81,14 @@ class _MainPageState extends State<MainPage> {
           leading: Icon(Icons.account_tree_outlined),
           onTap: () => _drawerNavigation(MajorManagement())),
     ];
+
+    List<Widget> _teacherMenuList = [
+      ListTile(
+        leading: Icon(Icons.account_circle),
+        title: Text('Profile'),
+        onTap: () => _drawerNavigation(TeacherProfilePage()),
+      ),
+    ];
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -105,7 +114,7 @@ class _MainPageState extends State<MainPage> {
                 ? _studentMenuList
                 : _userRole == 'a'
                     ? _adminMenuList
-                    : []),
+                    : _teacherMenuList),
             Divider(
               thickness: 1.5,
             ),

@@ -16,6 +16,7 @@ class _MajorManagementState extends State<MajorManagement> {
   @override
   void initState() {
     super.initState();
+    print(ModelService().userRole);
     getData();
   }
 

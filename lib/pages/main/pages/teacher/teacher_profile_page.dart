@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/model/models/student/get_profile_model.dart';
+import 'package:nusbi_flutter/model/models/teacher/get_teacher_profile_model.dart';
 
-class ProfilePage extends StatefulWidget {
+class TeacherProfilePage extends StatefulWidget {
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _TeacherProfilePageState createState() => _TeacherProfilePageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  GetProfileResponse _data = GetProfileResponse();
+class _TeacherProfilePageState extends State<TeacherProfilePage> {
+  GetTeacherProfileResponse _data = GetTeacherProfileResponse();
 
   @override
   void initState() {
@@ -23,25 +24,25 @@ class _ProfilePageState extends State<ProfilePage> {
       _isLoading = true;
     });
     var result = await ModelService()
-        .doAuthRequest(GetProfileRequest(ModelService().username));
+        .doAuthRequest(GetTeacherProfileRequest(ModelService().username));
 
     if (result is String) {
       Navigator.of(context).pop();
       showDialog(
           context: context,
           builder: (x) => AlertDialog(
-                title: Text('Error'),
-                content: Text(result),
-                actions: [
-                  FlatButton(
-                    child: Text("Ok"),
-                    onPressed: () => Navigator.of(x).pop(),
-                  )
-                ],
-              ));
+            title: Text('Error'),
+            content: Text(result),
+            actions: [
+              FlatButton(
+                child: Text("Ok"),
+                onPressed: () => Navigator.of(x).pop(),
+              )
+            ],
+          ));
       return;
     }
-    _data = result as GetProfileResponse;
+    _data = result as GetTeacherProfileResponse;
     setState(() {
       _isLoading = false;
     });
@@ -99,28 +100,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         ],
                       ),
                       ListTile(
-                        title: Text("Major"),
-                        trailing: Text(_data.major,style:TextStyle(fontWeight:FontWeight.bold)),
-                      ),
-                      ListTile(
                         title: Text("Email"),
                         trailing: Text(_data.email,style:TextStyle(fontWeight:FontWeight.bold)),
                       ),
                       ListTile(
                         title: Text("Date of birth"),
                         trailing: Text(_data.dOB,style:TextStyle(fontWeight:FontWeight.bold)),
-                      ),
-                      ListTile(
-                        title: Text("GPA"),
-                        trailing: Text(_data.gPA.valid
-                            ? _data.gPA.int32.toString()
-                            : 'Not Available',style:TextStyle(fontWeight:FontWeight.bold)),
-                      ),
-                      ListTile(
-                        title: Text("Total SCU"),
-                        trailing: Text(_data.sCU.valid
-                            ? _data.sCU.int32.toString()
-                            : 'Not Available',style:TextStyle(fontWeight:FontWeight.bold)),
                       ),
                     ],
                   ),
@@ -131,35 +116,35 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         _isLoading
             ? Container(
-                height: double.infinity,
-                width: double.infinity,
-                color: Colors.black.withOpacity(0.4),
-                alignment: Alignment.center,
-                child: Container(
-                  padding: EdgeInsets.all(32),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15)),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 16,
-                      ),
-                      CircularProgressIndicator(),
-                      SizedBox(
-                        height: 16,
-                      ),
-                      Text(
-                        'Please wait',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      )
-                    ],
-                  ),
+          height: double.infinity,
+          width: double.infinity,
+          color: Colors.black.withOpacity(0.4),
+          alignment: Alignment.center,
+          child: Container(
+            padding: EdgeInsets.all(32),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  height: 16,
                 ),
-              )
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 16,
+                ),
+                Text(
+                  'Please wait',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 18),
+                )
+              ],
+            ),
+          ),
+        )
             : Container(),
       ]),
     );

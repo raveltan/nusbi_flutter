@@ -68,6 +68,9 @@ class _ScheduleManagementState extends State<ScheduleManagement> {
                   initialDatePickerMode: DatePickerMode.day,
                   firstDate: DateTime(2015),
                   lastDate: DateTime(2101));
+              if(date == null) {
+                return;
+              }
               var dob = "${date.year}-${date.month}-${date.day}";
               toggleLoading(true);
               var result = await ModelService()
