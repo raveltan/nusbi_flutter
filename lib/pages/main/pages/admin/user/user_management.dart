@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/model/models/admin/user/get_user_model.dart';
+import 'package:nusbi_flutter/pages/main/pages/admin/user/student_class_management.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/user/user_new.dart';
 
 class UserManagementPage extends StatefulWidget {
@@ -118,7 +119,18 @@ class _UserManagementPageState extends State<UserManagementPage> {
                         title: Text('${_users[i].username}'),
                         subtitle: Text(
                             '${_users[i].role == 'a' ? "Admin" : _users[i].role == 's' ? "Student" : "Teacher"}'),
-                        onTap: () {},
+                        trailing: _users[i].role == 's'
+                            ? IconButton(
+                                icon: Icon(Icons.list_rounded),
+                                onPressed: () => Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (x) =>
+                                            StudentClassManagement(_users[i].username))),
+                              )
+                            : Icon(
+                                Icons.add_box_sharp,
+                                size: 0,
+                              ),
                       ),
                   separatorBuilder: (x, i) => Divider(
                         height: 0,

@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
-import 'package:nusbi_flutter/model/models/admin/major/create_major_model.dart';
+import 'package:nusbi_flutter/model/models/admin/course/get_class_course.dart';
 import 'package:nusbi_flutter/model/models/admin/major/get_major_model.dart';
 
-class MajorManagement extends StatefulWidget {
+class StudentClassManagement extends StatefulWidget {
+  String username;
+
+  StudentClassManagement(this.username);
+
   @override
-  _MajorManagementState createState() => _MajorManagementState();
+  _StudentClassManagement createState() => _StudentClassManagement();
 }
 
-class _MajorManagementState extends State<MajorManagement> {
-  var addMajorTextEditingController = TextEditingController();
-  List<MajorResponseData> _majors = [];
+class _StudentClassManagement extends State<StudentClassManagement> {
+  List<MajorResponseData> _data = [];
+  List<GetClassCourseRequest> _courseClassData;
   var _isLoading = false;
 
   @override
@@ -19,7 +23,48 @@ class _MajorManagementState extends State<MajorManagement> {
     getData();
   }
 
-  Future<void> deleteMajor() async {}
+  void addClass() async {
+    setState(() => this._isLoading = true);
+    var result = await ModelService().doAuthRequest(GetClassCourseRequest());
+    setState(() => this._isLoading = false);
+    if (result is String) {
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text('Error'),
+                content: Text(result),
+                actions: [
+                  FlatButton(
+                    child: Text("Ok"),
+                    onPressed: () => Navigator.of(x).pop(),
+                  )
+                ],
+              ));
+      return;
+    }
+    var _res = result as GetClassCourseResponse;
+
+    var _resId = await Navigator.of(context).push(MaterialPageRoute(
+        fullscreenDialog: true,
+        builder: (x) => Scaffold(
+              appBar: AppBar(
+                title: Text('Select Class'),
+              ),
+              body: ListView.builder(
+                itemCount: _res.data.length,
+                  itemBuilder: (x, i) => ListTile(
+                        title: Text(_res.data[i].courseName),
+                        subtitle: Text(_res.data[i].className),
+                        trailing: IconButton(
+                          onPressed: () {
+                            Navigator.of(x).pop(_res.data[i].classID);
+                          },
+                          icon: Icon(Icons.add),
+                        ),
+                      )),
+            )));
+    // Add class to student enrolled course
+  }
 
   Future<void> getData() async {
     setState(() {
@@ -43,79 +88,22 @@ class _MajorManagementState extends State<MajorManagement> {
               ));
       return;
     }
-    _majors = (result as GetMajorResponse).data;
+    _data = (result as GetMajorResponse).data;
     setState(() {
       _isLoading = false;
     });
-  }
-
-  void addMajor() async {
-    var result = await ModelService()
-        .doAuthRequest(CreateMajorRequest(addMajorTextEditingController.text));
-    addMajorTextEditingController.text = "";
-    Navigator.of(context).pop();
-    if (result is String) {
-      showDialog(
-          context: context,
-          builder: (x) => AlertDialog(
-                title: Text('Error'),
-                content: Text(result),
-                actions: [
-                  FlatButton(
-                      child: Text("Ok"),
-                      onPressed: () => Navigator.of(context).pop(),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20)))
-                ],
-              ));
-      return;
-    }
-    await getData();
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      action: SnackBarAction(
-        label: "Ok",
-        onPressed: ScaffoldMessenger.of(context).hideCurrentSnackBar,
-      ),
-      content: Text("Major Added"),
-    ));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Majors'),
+        title: Text('${widget.username} - Class'),
         centerTitle: true,
         actions: [
           IconButton(
             icon: Icon(Icons.add),
-            onPressed: () => showDialog(
-                context: context,
-                builder: (x) => AlertDialog(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      title: Text("New Major"),
-                      content: TextField(
-                        decoration: InputDecoration(
-                            labelText: "Major Name",
-                            hintText: "Computer Science"),
-                        controller: addMajorTextEditingController,
-                        onSubmitted: (_) => addMajor,
-                      ),
-                      actions: [
-                        FlatButton(
-                          child: Text("Add"),
-                          onPressed: addMajor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20)),
-                        ),
-                        FlatButton(
-                            child: Text("Cancel"),
-                            onPressed: () => Navigator.of(context).pop(),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)))
-                      ],
-                    )),
+            onPressed: addClass,
           )
         ],
       ),
@@ -127,12 +115,13 @@ class _MajorManagementState extends State<MajorManagement> {
               radius: Radius.circular(30),
               child: ListView.separated(
                   itemBuilder: (x, i) => ListTile(
-                        title: Text(_majors[i].name),
+                        title: Text("Computer Science"),
+                        subtitle: Text("L3AC"),
                       ),
                   separatorBuilder: (x, i) => Divider(
                         height: 0,
                       ),
-                  itemCount: _majors.length),
+                  itemCount: _data.length),
             ),
           ),
         ),
