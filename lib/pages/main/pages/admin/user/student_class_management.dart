@@ -45,7 +45,6 @@ class _StudentClassManagement extends State<StudentClassManagement> {
       return;
     }
     var _res = result as GetClassCourseResponse;
-
     var _resId = await Navigator.of(context).push(MaterialPageRoute(
         fullscreenDialog: true,
         builder: (x) => Scaffold(
