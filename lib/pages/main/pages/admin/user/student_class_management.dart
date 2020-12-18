@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nusbi_flutter/model/model_service.dart';
+import 'package:nusbi_flutter/model/models/admin/course/enroll_student_model.dart';
 import 'package:nusbi_flutter/model/models/admin/course/get_class_course.dart';
+import 'package:nusbi_flutter/model/models/admin/course/get_enroll_model.dart';
 import 'package:nusbi_flutter/model/models/admin/major/get_major_model.dart';
 
 class StudentClassManagement extends StatefulWidget {
@@ -13,8 +15,7 @@ class StudentClassManagement extends StatefulWidget {
 }
 
 class _StudentClassManagement extends State<StudentClassManagement> {
-  List<MajorResponseData> _data = [];
-  List<GetClassCourseRequest> _courseClassData;
+  List<EnrollResponse> _data = [];
   var _isLoading = false;
 
   @override
@@ -25,7 +26,8 @@ class _StudentClassManagement extends State<StudentClassManagement> {
 
   void addClass() async {
     setState(() => this._isLoading = true);
-    var result = await ModelService().doAuthRequest(GetClassCourseRequest());
+    var result = await ModelService()
+        .doAuthRequest(GetClassCourseRequest(widget.username));
     setState(() => this._isLoading = false);
     if (result is String) {
       showDialog(
@@ -51,7 +53,7 @@ class _StudentClassManagement extends State<StudentClassManagement> {
                 title: Text('Select Class'),
               ),
               body: ListView.builder(
-                itemCount: _res.data.length,
+                  itemCount: _res.data.length,
                   itemBuilder: (x, i) => ListTile(
                         title: Text(_res.data[i].courseName),
                         subtitle: Text(_res.data[i].className),
@@ -63,14 +65,39 @@ class _StudentClassManagement extends State<StudentClassManagement> {
                         ),
                       )),
             )));
-    // Add class to student enrolled course
+    if (_resId == null) return;
+    var _err = await ModelService()
+        .doAuthRequest(EnrollStudentRequest(_resId, widget.username));
+    if (_err is String) {
+      showDialog(
+          context: context,
+          builder: (x) => AlertDialog(
+                title: Text('Error'),
+                content: Text(_err),
+                actions: [
+                  FlatButton(
+                    child: Text("Ok"),
+                    onPressed: () => Navigator.of(x).pop(),
+                  )
+                ],
+              ));
+      return;
+    }
+    getData();
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text('Class is added successfully enrolled'),
+      action: SnackBarAction(
+        label: 'Ok',
+        onPressed: () => ScaffoldMessenger.of(context).hideCurrentSnackBar(),
+      ),
+    ));
   }
 
   Future<void> getData() async {
     setState(() {
       _isLoading = true;
     });
-    var result = await ModelService().doAuthRequest(GetMajorRequest());
+    var result = await ModelService().doAuthRequest(GetEnrolledRequest(widget.username));
 
     if (result is String) {
       Navigator.of(context).pop();
@@ -88,7 +115,7 @@ class _StudentClassManagement extends State<StudentClassManagement> {
               ));
       return;
     }
-    _data = (result as GetMajorResponse).data;
+    _data = (result as GetEnrolledResponse).data ?? [];
     setState(() {
       _isLoading = false;
     });
@@ -115,8 +142,8 @@ class _StudentClassManagement extends State<StudentClassManagement> {
               radius: Radius.circular(30),
               child: ListView.separated(
                   itemBuilder: (x, i) => ListTile(
-                        title: Text("Computer Science"),
-                        subtitle: Text("L3AC"),
+                        title: Text(_data[i].courseName),
+                        subtitle: Text(_data[i].className),
                       ),
                   separatorBuilder: (x, i) => Divider(
                         height: 0,

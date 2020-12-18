@@ -2,16 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:nusbi_flutter/model/request_base.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http ;
 
-class GetClassCourseRequest extends AuthRequestBase<GetClassCourseResponse>{
-  String username;
-  GetClassCourseRequest(this.username);
+class GetEnrolledRequest extends AuthRequestBase {
+  String id;
+  GetEnrolledRequest(this.id);
   @override
-  Future doAuthRequest(String token) async {
+  Future doAuthRequest(String token) async  {
     http.Response res;
     try {
-      res = await http.get(apiUrl + '/$username',
+      res = await http.get(apiUrl + '/$id',
           headers: {HttpHeaders.authorizationHeader: "Bearer $token"});
     } catch (e) {
       error = 'Unable to connect to server';
@@ -29,7 +29,7 @@ class GetClassCourseRequest extends AuthRequestBase<GetClassCourseResponse>{
       return;
     }
     try {
-      response = GetClassCourseResponse.fromJson(jsonDecode(res.body));
+      response = GetEnrolledResponse.fromJson(jsonDecode(res.body));
     } catch (e) {
       error = "Bad response";
       return;
@@ -43,21 +43,19 @@ class GetClassCourseRequest extends AuthRequestBase<GetClassCourseResponse>{
   }
 
   @override
-  void setApiUrl(String url) => apiUrl = url + '/admin/classCourse';
-
+  void setApiUrl(String url) => apiUrl = url + '/admin/enroll';
 }
 
+class GetEnrolledResponse {
+  List<EnrollResponse> data;
 
-class GetClassCourseResponse {
-  List<ClassCourseData> data;
+  GetEnrolledResponse({this.data});
 
-  GetClassCourseResponse({this.data});
-
-  GetClassCourseResponse.fromJson(Map<String, dynamic> json) {
+  GetEnrolledResponse.fromJson(Map<String, dynamic> json) {
     if (json['data'] != null) {
-      data = List<ClassCourseData>();
+      data = new List<EnrollResponse>();
       json['data'].forEach((v) {
-        data.add(new ClassCourseData.fromJson(v));
+        data.add(new EnrollResponse.fromJson(v));
       });
     }
   }
@@ -71,14 +69,14 @@ class GetClassCourseResponse {
   }
 }
 
-class ClassCourseData {
+class EnrollResponse {
   String className;
   String courseName;
   String classID;
 
-  ClassCourseData({this.className, this.courseName, this.classID});
+  EnrollResponse({this.className, this.courseName, this.classID});
 
-  ClassCourseData.fromJson(Map<String, dynamic> json) {
+  EnrollResponse.fromJson(Map<String, dynamic> json) {
     className = json['ClassName'];
     courseName = json['CourseName'];
     classID = json['ClassID'];
