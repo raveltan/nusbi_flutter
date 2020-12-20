@@ -4,7 +4,6 @@ import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/course/course_management.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/major/major_management.dart';
 import 'package:nusbi_flutter/pages/main/pages/admin/user/user_management.dart';
-import 'package:nusbi_flutter/pages/main/pages/student/assignment_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/attendance_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/courses_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/profile_page.dart';
@@ -45,10 +44,6 @@ class _MainPageState extends State<MainPage> {
           leading: Icon(Icons.calendar_today),
           onTap: () => _drawerNavigation(SchedulePage())),
       ListTile(
-          title: Text('Assignment'),
-          leading: Icon(Icons.add_box_rounded),
-          onTap: () => _drawerNavigation(AssignmentPage())),
-      ListTile(
         title: Text('Courses'),
         leading: Icon(Icons.book),
         onTap: () => _drawerNavigation(CoursesPage()),
@@ -83,6 +78,19 @@ class _MainPageState extends State<MainPage> {
     ];
 
     List<Widget> _teacherMenuList = [
+      ListTile(
+        title: Text('Schedule'),
+        leading: Icon(Icons.calendar_today),
+        onTap: () {},
+      ),
+      ListTile(
+        title: Text('Courses'),
+        leading: Icon(Icons.book),
+        onTap: () {},
+      ),
+      Divider(
+        thickness: 1.5,
+      ),
       ListTile(
         leading: Icon(Icons.account_circle),
         title: Text('Profile'),

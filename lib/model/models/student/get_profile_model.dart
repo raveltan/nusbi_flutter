@@ -4,10 +4,11 @@ import 'dart:io';
 import 'package:nusbi_flutter/model/request_base.dart';
 import 'package:http/http.dart' as http;
 
-
-class GetProfileRequest extends AuthRequestBase<GetProfileResponse>{
+class GetProfileRequest extends AuthRequestBase<GetProfileResponse> {
   String id;
+
   GetProfileRequest(this.id);
+
   @override
   Future doAuthRequest(String token) async {
     http.Response res;
@@ -18,20 +19,21 @@ class GetProfileRequest extends AuthRequestBase<GetProfileResponse>{
       error = 'Unable to connect to server';
       return;
     }
-    if(res.body == "Invalid or expired JWT"){
+    if (res.body == "Invalid or expired JWT") {
       doRefreshToken = true;
       return;
     }
     if (res.statusCode == 403) {
       error = "Access denied";
       return;
-    }else if(res.statusCode != 200){
+    } else if (res.statusCode != 200) {
       error = "Server error";
       return;
     }
     try {
       response = GetProfileResponse.fromJson(jsonDecode(res.body));
     } catch (e) {
+      print(e);
       error = "Bad response";
       return;
     }
@@ -45,7 +47,6 @@ class GetProfileRequest extends AuthRequestBase<GetProfileResponse>{
 
   @override
   void setApiUrl(String url) => apiUrl = url + '/student/profile';
-
 }
 
 class GetProfileResponse {
@@ -55,18 +56,18 @@ class GetProfileResponse {
   String dOB;
   String email;
   GPA gPA;
-  GPA sCU;
+  SCU sCU;
   String major;
 
   GetProfileResponse(
       {this.firstName,
-        this.lastName,
-        this.gender,
-        this.dOB,
-        this.email,
-        this.gPA,
-        this.sCU,
-        this.major});
+      this.lastName,
+      this.gender,
+      this.dOB,
+      this.email,
+      this.gPA,
+      this.sCU,
+      this.major});
 
   GetProfileResponse.fromJson(Map<String, dynamic> json) {
     firstName = json['FirstName'];
@@ -75,7 +76,7 @@ class GetProfileResponse {
     dOB = json['DOB'];
     email = json['Email'];
     gPA = json['GPA'] != null ? new GPA.fromJson(json['GPA']) : null;
-    sCU = json['SCU'] != null ? new GPA.fromJson(json['SCU']) : null;
+    sCU = json['SCU'] != null ? new SCU.fromJson(json['SCU']) : null;
     major = json['Major'];
   }
 
@@ -98,12 +99,28 @@ class GetProfileResponse {
 }
 
 class GPA {
+  double int32;
+  bool valid;
+
+
+  GPA.fromJson(Map<String, dynamic> json) {
+    int32 = json['Float64'];
+    valid = json['Valid'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['Int32'] = this.int32;
+    data['Valid'] = this.valid;
+    return data;
+  }
+}
+
+class SCU {
   int int32;
   bool valid;
 
-  GPA({this.int32, this.valid});
-
-  GPA.fromJson(Map<String, dynamic> json) {
+  SCU.fromJson(Map<String, dynamic> json) {
     int32 = json['Int32'];
     valid = json['Valid'];
   }

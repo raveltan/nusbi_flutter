@@ -38,7 +38,7 @@ class _CoursePageState extends State<CoursesPage> {
           ));
       return;
     }
-    _data = (result as GetStudentCourseResponse).data;
+    _data = (result as GetStudentCourseResponse).data ?? [];
     setState(() {
       _isLoading = false;
     });

@@ -3,7 +3,6 @@ import 'package:nusbi_flutter/model/model_service.dart';
 import 'package:nusbi_flutter/model/models/admin/course/enroll_student_model.dart';
 import 'package:nusbi_flutter/model/models/admin/course/get_class_course.dart';
 import 'package:nusbi_flutter/model/models/admin/course/get_enroll_model.dart';
-import 'package:nusbi_flutter/model/models/admin/major/get_major_model.dart';
 
 class StudentClassManagement extends StatefulWidget {
   String username;

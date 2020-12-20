@@ -46,7 +46,7 @@ class _SchedulePageState extends State<SchedulePage> {
           ));
       return;
     }
-    for(var x in (result as GetStudentScheduleResponse).studentScheduleResponse){
+    for(var x in (result as GetStudentScheduleResponse).studentScheduleResponse ?? []){
       if(_data[DateTime.parse(x.date)] == null){
         _data[DateTime.parse(x.date)] = ['${x.course} - ${x.className}'];
       }else{

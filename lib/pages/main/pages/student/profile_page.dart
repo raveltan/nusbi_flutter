@@ -113,7 +113,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       ListTile(
                         title: Text("GPA"),
                         trailing: Text(_data.gPA.valid
-                            ? _data.gPA.int32.toString()
+                            ? _data.gPA.int32.toStringAsFixed(2)
                             : 'Not Available',style:TextStyle(fontWeight:FontWeight.bold)),
                       ),
                       ListTile(
