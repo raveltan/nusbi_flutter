@@ -9,6 +9,7 @@ import 'package:nusbi_flutter/pages/main/pages/student/courses_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/profile_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/schedule_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/teacher/teacher_profile_page.dart';
+import 'package:nusbi_flutter/pages/main/pages/teacher/teacher_schedule_page.dart';
 
 class MainPage extends StatefulWidget {
   final VoidCallback _signOutCallback;
@@ -81,7 +82,7 @@ class _MainPageState extends State<MainPage> {
       ListTile(
         title: Text('Schedule'),
         leading: Icon(Icons.calendar_today),
-        onTap: () {},
+        onTap: () => _drawerNavigation(TeacherSchedulePage()),
       ),
       ListTile(
         title: Text('Courses'),
