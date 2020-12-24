@@ -62,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
             color: Colors.deepOrangeAccent,
             alignment: Alignment.center,
             child: Container(
+              margin: EdgeInsets.all(32),
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(20)),
               constraints: BoxConstraints(maxWidth: 400),
@@ -69,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                 radius: Radius.circular(30),
                 child: SingleChildScrollView(
                   child: Padding(
-                    padding: const EdgeInsets.all(32.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
                         Text(
