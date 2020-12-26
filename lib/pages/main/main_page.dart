@@ -8,6 +8,7 @@ import 'package:nusbi_flutter/pages/main/pages/student/attendance_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/courses_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/profile_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/student/schedule_page.dart';
+import 'package:nusbi_flutter/pages/main/pages/teacher/teacher_courses_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/teacher/teacher_profile_page.dart';
 import 'package:nusbi_flutter/pages/main/pages/teacher/teacher_schedule_page.dart';
 
@@ -87,7 +88,7 @@ class _MainPageState extends State<MainPage> {
       ListTile(
         title: Text('Courses'),
         leading: Icon(Icons.book),
-        onTap: () {},
+        onTap: () => _drawerNavigation(TeacherCoursesPage()),
       ),
       Divider(
         thickness: 1.5,
