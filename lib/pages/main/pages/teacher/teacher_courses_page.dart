@@ -53,7 +53,7 @@ class _TeacherCoursePageState extends State<TeacherCoursesPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrangeAccent,
-        title: Text('Courses'),
+        title: Text('Classes'),
       ),
       body: Stack(children: [
         Center(
@@ -70,8 +70,13 @@ class _TeacherCoursePageState extends State<TeacherCoursesPage> {
                           icon: Icon(Icons.list),
                           onPressed: () => Navigator.of(context).push(
                               MaterialPageRoute(
-                                // TODO: Add class ID
-                                  builder: (x) => TeacherClassStudentPage(_data[index].classID,_data[index].className +' - '+ _data[index].courseName))),
+                                  // TODO: Add class ID
+                                  builder: (x) => TeacherClassStudentPage(
+                                      _data[index].classID,
+                                      _data[index].className +
+                                          ' - ' +
+                                          _data[index].courseName,
+                                      _data[index].classID))),
                         ),
                         leading: CircleAvatar(
                           backgroundColor: Colors.deepOrangeAccent.shade100,

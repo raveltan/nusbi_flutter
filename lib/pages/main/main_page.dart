@@ -86,7 +86,7 @@ class _MainPageState extends State<MainPage> {
         onTap: () => _drawerNavigation(TeacherSchedulePage()),
       ),
       ListTile(
-        title: Text('Courses'),
+        title: Text('Class'),
         leading: Icon(Icons.book),
         onTap: () => _drawerNavigation(TeacherCoursesPage()),
       ),

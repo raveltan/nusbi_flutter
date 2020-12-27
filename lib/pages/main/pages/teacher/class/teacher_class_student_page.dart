@@ -8,8 +8,8 @@ import 'package:nusbi_flutter/pages/main/pages/teacher/class/teacher_class_atten
 class TeacherClassStudentPage extends StatefulWidget {
   String ID;
   String className;
-
-  TeacherClassStudentPage(this.ID, this.className);
+  String classID;
+  TeacherClassStudentPage(this.ID, this.className,this.classID);
 
   @override
   _TeacherClassStudentPage createState() => _TeacherClassStudentPage();
@@ -155,11 +155,12 @@ class _TeacherClassStudentPage extends State<TeacherClassStudentPage> {
             children: [
               ListTile(
                 title: Text('Attendance'),
-                onTap: () =>
-                    Navigator.of(context).push(MaterialPageRoute(builder: (x) {
+                onTap: () {
                   Navigator.of(context).pop();
-                  return TeacherClassAttendance();
-                })),
+                  return Navigator.of(context).push(MaterialPageRoute(
+                      builder: (x) =>
+                          TeacherClassAttendance(widget.classID, studentID)));
+                },
               ),
               ListTile(
                 title: Text('Set Mid Score'),
